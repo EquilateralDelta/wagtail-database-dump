@@ -1,6 +1,8 @@
 import os
+import glob
 
 from django.core.management.base import BaseCommand, CommandError
+from django.core.management import call_command
 
 from wagtaildatabasedump import DEFAULT_FOLDER
 
@@ -17,3 +19,6 @@ class Command(BaseCommand):
         if not os.path.isdir(folder):
             raise CommandError(
                 f"Folder {folder} to load data from does not exist!")
+
+        files = glob.glob(os.path.join(folder, '*.json'))
+        call_command('loaddata', ' '.join(files))
